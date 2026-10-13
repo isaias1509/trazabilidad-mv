@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trazabilidad M&amp;V Textil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<section id="login">
+  <form class="login-card" id="loginForm" novalidate>
+    <div class="brandmark"><b>M&amp;V</b><span>TEXTIL</span></div>
+    <div><h1 style="font-size:22px">Trazabilidad de materiales y órdenes</h1><p class="hint" style="margin:4px 0 0">Prototipo funcional · primer incremento</p></div>
+    <div class="field"><label for="lgUser">Usuario</label>
+      <select id="lgUser">
+        <option value="0">Lorenzo Medina · Administrador</option>
+        <option value="1">Alejandro Medina · Control de materiales</option>
+        <option value="2">Almacén</option>
+        <option value="3">Ventas</option>
+      </select></div>
+    <div class="field"><label for="lgPass">Contraseña</label><input id="lgPass" type="password" value="demo123" autocomplete="off"></div>
+    <p class="err" id="lgErr" hidden>Contraseña incorrecta. Para la demostración es demo123.</p>
+    <button class="btn" type="submit">Ingresar</button>
+    <p class="hint">Datos de ejemplo para la demostración. Contraseña: demo123</p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <aside>
+    <div class="brandmark"><b>M&amp;V</b><span>TEXTIL</span></div>
+    <nav id="nav"></nav>
+    <div class="user"><div id="who"></div><button class="btn ghost sm" id="logout" type="button">Cerrar sesión</button><button class="btn ghost sm" id="reset" type="button">Restablecer datos de ejemplo</button></div>
+  </aside>
+  <main id="view"></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="js/datos.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

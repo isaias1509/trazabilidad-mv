@@ -1,0 +1,84 @@
+/* ==========================================================
+   Sistema de trazabilidad M & V Technology Textil S.A.C.
+   Hoja de estilos del prototipo (tema claro/oscuro, componentes)
+   ========================================================== */
+/* Layout: barra lateral fija (módulos) + área de trabajo; en móvil la barra pasa arriba */
+:root{
+  --bg:#F7F4F4; --surface:#FFFFFF; --ink:#231B1C; --muted:#6E6162; --line:#E6DCDC;
+  --brand:#8E1F1F; --brand-ink:#FFFFFF; --brand-soft:#F6E7E7;
+  --ok:#1F7A4A; --ok-soft:#E3F3EA; --warn:#A35F00; --warn-soft:#FBEFD9; --bad:#B42318; --bad-soft:#FDE6E3;
+  --display:'Archivo',system-ui,sans-serif; --body:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171213; --surface:#211A1B; --ink:#F2EAEA; --muted:#B4A5A6; --line:#3A2E2F;
+  --brand:#D45454; --brand-ink:#1A0F10; --brand-soft:#3A2224;
+  --ok:#5CC48C; --ok-soft:#173326; --warn:#E3A44A; --warn-soft:#3A2C14; --bad:#F27B6E; --bad-soft:#3D1F1C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171213; --surface:#211A1B; --ink:#F2EAEA; --muted:#B4A5A6; --line:#3A2E2F;
+  --brand:#D45454; --brand-ink:#1A0F10; --brand-soft:#3A2224;
+  --ok:#5CC48C; --ok-soft:#173326; --warn:#E3A44A; --warn-soft:#3A2C14; --bad:#F27B6E; --bad-soft:#3D1F1C; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+button,input,select{font:inherit;color:inherit}
+.num{font-variant-numeric:tabular-nums}
+/* Login */
+#login{min-height:100%;display:grid;place-items:center;padding:24px 16px}
+.login-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;display:grid;gap:16px}
+.brandmark{display:flex;align-items:baseline;gap:8px}
+.brandmark b{font-family:var(--display);font-weight:800;font-size:26px;color:var(--brand);letter-spacing:-.5px}
+.brandmark span{font-family:var(--display);font-weight:700;letter-spacing:4px;font-size:12px;color:var(--muted)}
+.field{display:grid;gap:6px}
+.field label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+input,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+.btn{border:0;border-radius:8px;padding:9px 14px;background:var(--brand);color:var(--brand-ink);font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--brand)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.hint{font-size:12.5px;color:var(--muted)}
+.err{color:var(--bad);font-size:13px}
+/* App */
+#app{display:grid;grid-template-columns:230px 1fr;min-height:100%}
+aside{background:var(--surface);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:18px}
+nav{display:grid;gap:4px}
+nav button{all:unset;cursor:pointer;padding:9px 12px;border-radius:8px;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+nav button:hover{background:var(--brand-soft)}
+nav button[aria-current="page"]{background:var(--brand);color:var(--brand-ink)}
+nav button:focus-visible{outline:2px solid var(--brand)}
+.badge{font-size:11px;font-weight:700;border-radius:99px;padding:1px 7px;background:var(--bad);color:#fff}
+.user{margin-top:auto;font-size:13px;color:var(--muted);display:grid;gap:6px}
+main{padding-block:24px;padding-inline:clamp(16px,3vw,32px);min-width:0;display:grid;gap:20px;align-content:start}
+.head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.head p{margin:4px 0 0;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi .v{font-family:var(--display);font-size:30px;font-weight:800}
+.kpi .l{font-size:13px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px;min-width:0;align-content:start}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.r,th.r{text-align:right}
+.code{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.c-ok{background:var(--ok-soft);color:var(--ok)} .c-warn{background:var(--warn-soft);color:var(--warn)} .c-bad{background:var(--bad-soft);color:var(--bad)} .c-brand{background:var(--brand-soft);color:var(--brand)}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;min-width:70px}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar i.low{background:var(--bad)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.step{font-size:12px;padding:3px 8px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.step.done{background:var(--brand-soft);color:var(--brand);border-color:transparent}
+.step.now{background:var(--brand);color:var(--brand-ink);border-color:transparent}
+.timeline{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.timeline li{display:grid;grid-template-columns:130px 1fr;gap:10px;font-size:14px}
+.timeline time{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:8px;font-size:14px}
+.demo{font-size:12px;color:var(--muted)}
+@media (max-width:760px){#app{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}nav{grid-template-columns:repeat(3,1fr)}.user{margin-top:0}.timeline li{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
