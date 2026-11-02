@@ -60,6 +60,7 @@ CREATE TABLE detalle_compra (
   id_compra INT NOT NULL,
   id_material INT NOT NULL,
   cantidad DECIMAL(10,2) NOT NULL,
+  cantidad_rechazada DECIMAL(10,2) NOT NULL DEFAULT 0,  -- llegó con falla, no entra al stock
   precio_unitario DECIMAL(10,2) NOT NULL,
   FOREIGN KEY (id_compra) REFERENCES compras(id_compra),
   FOREIGN KEY (id_material) REFERENCES materiales(id_material)
@@ -82,7 +83,7 @@ CREATE TABLE ordenes (
   id_pedido INT NOT NULL,
   fecha_inicio DATE NOT NULL,
   fecha_limite DATE NOT NULL,
-  estado ENUM('PENDIENTE','EN_CORTE','EN_CONFECCION','EN_ESTAMPADO','TERMINADO','ENTREGADO') NOT NULL DEFAULT 'PENDIENTE',
+  estado ENUM('PENDIENTE','EN_CORTE','EN_CONFECCION','EN_ESTAMPADO','TERMINADO','ENTREGADO','CANCELADA') NOT NULL DEFAULT 'PENDIENTE',
   costo_total DECIMAL(10,2) NOT NULL DEFAULT 0,
   FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido)
 );
@@ -113,13 +114,18 @@ CREATE TABLE movimientos (
   id_material INT NOT NULL,
   id_orden INT NULL,
   id_usuario INT NOT NULL,
-  tipo ENUM('ENTRADA','SALIDA_ORDEN','AJUSTE') NOT NULL,
+  tipo ENUM('ENTRADA','SALIDA_ORDEN','DEVOLUCION','MERMA','AJUSTE','ANULACION') NOT NULL,
   cantidad DECIMAL(10,2) NOT NULL,
+  efecto DECIMAL(10,2) NOT NULL DEFAULT 0,   -- cuánto cambia el stock (+ entra, - sale, 0 merma en taller)
   saldo DECIMAL(10,2) NOT NULL,
+  motivo VARCHAR(150) NULL,                  -- motivo de merma, ajuste o anulación
+  anulado TINYINT(1) NOT NULL DEFAULT 0,     -- nunca se borra: se marca y se crea el movimiento contrario
+  id_movimiento_anulado INT NULL,            -- en una ANULACION, el movimiento que anula
   fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (id_material) REFERENCES materiales(id_material),
   FOREIGN KEY (id_orden) REFERENCES ordenes(id_orden),
-  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+  FOREIGN KEY (id_movimiento_anulado) REFERENCES movimientos(id_movimiento)
 );
 
 CREATE TABLE estados_orden (
@@ -175,9 +181,11 @@ INSERT INTO materiales_orden (id_orden, id_material, cantidad_requerida, cantida
 INSERT INTO asignaciones (id_orden, id_costurero, maquina, cantidad_piezas, fecha) VALUES
 (1,1,'Recta 1',20,'2026-10-07'),(1,2,'Recta 2',20,'2026-10-07');
 
-INSERT INTO movimientos (id_material, id_orden, id_usuario, tipo, cantidad, saldo, fecha) VALUES
-(1,NULL,2,'ENTRADA',50,120,'2026-10-01 10:00'),(2,NULL,2,'ENTRADA',50,95,'2026-10-01 10:00'),
-(3,1,2,'SALIDA_ORDEN',32,60,'2026-10-05 09:30'),(4,1,2,'SALIDA_ORDEN',4,18,'2026-10-05 09:35');
+INSERT INTO movimientos (id_material, id_orden, id_usuario, tipo, cantidad, efecto, saldo, motivo, fecha) VALUES
+(1,NULL,2,'ENTRADA',50,50,120,NULL,'2026-10-01 10:00'),(2,NULL,2,'ENTRADA',50,50,95,NULL,'2026-10-01 10:00'),
+(3,1,2,'SALIDA_ORDEN',32,-32,60,NULL,'2026-10-05 09:30'),(4,1,2,'SALIDA_ORDEN',4,-4,18,NULL,'2026-10-05 09:35'),
+(3,1,2,'MERMA',2.5,0,60,'Retazos de corte que no se pueden usar','2026-10-07 16:00'),
+(3,1,2,'DEVOLUCION',1.5,1.5,61.5,NULL,'2026-10-08 10:00');
 
 INSERT INTO estados_orden (id_orden, id_usuario, estado, fecha, observacion) VALUES
 (1,1,'PENDIENTE','2026-10-05 09:00','Orden creada'),(1,1,'EN_CORTE','2026-10-06 09:00','Tendido y tizado'),

@@ -1,26 +1,39 @@
 # Sistema de trazabilidad de materiales y órdenes de producción
-M & V Technology Textil S.A.C. · Prototipo funcional (primer incremento)
+M & V Technology Textil S.A.C. · Prototipo funcional (segundo incremento)
 
 ## Cómo abrirlo
 1. Abrir esta carpeta en Visual Studio Code.
-2. Instalar la extensión **Live Server**.
-3. Clic derecho en `index.html` → **Open with Live Server**.
-4. Se abre en `http://127.0.0.1:5500` · usuario: cualquiera · contraseña: `demo123`.
+2. Clic derecho en `index.html` → **Open with Live Server** (o abrir el link de GitHub Pages).
+3. Elegir un usuario · contraseña: `demo123`. Cada rol ve solo sus acciones.
 
-## Estructura del proyecto
-```
-trazabilidad-mv/
-├── index.html          → estructura de las pantallas (login, menú, vistas)
-├── css/estilos.css     → estilos y tema claro/oscuro
-├── js/datos.js         → datos de ejemplo (estados, usuarios, materiales, órdenes)
-├── js/app.js           → lógica: stock mínimo, kardex, estados de la orden, trazabilidad
-└── bd/
-    ├── mv_trazabilidad.sql  → base de datos MySQL (13 tablas + datos de prueba)
-    ├── modelo_logico.png
-    └── modelo_fisico.png
-```
-En este primer incremento los datos se guardan en el navegador (localStorage).
-La base de datos MySQL ya está diseñada y se conecta en el siguiente sprint.
+## Qué cubre
+| Situación real | Dónde se registra | Qué pasa con el stock |
+|---|---|---|
+| Compra recibida | Compras | Sube |
+| Llega material fallado | Compras → "rechazada por falla" | Lo rechazado no entra |
+| Entrega de material a una orden | Orden → Entregar material | Baja; si supera lo estimado queda como "entrega adicional" |
+| Sobra material en el taller | Orden → Devolver sobrante | Sube |
+| Merma en el taller (retazos, falla, error) | Orden → Reportar merma | No cambia (ya había salido); va al reporte de merma |
+| El conteo físico no cuadra / daño en almacén | Materiales → Ajustar (solo administrador) | Se corrige con motivo |
+| Se registró algo mal | Kardex → Anular (solo administrador) | Nada se borra: se crea el movimiento contrario |
+| Prendas falladas, hay que rehacer | Orden → Cambiar estado → Regresar (con nota) | — |
+| Cambio de costurera | Orden → Costurera | — |
+| El cliente cancela | Orden → Cancelar (luego devolver material) | Sube al devolver |
+| Orden atrasada / por vencer | Pantalla "Hoy" | — |
+| Insumos por agotarse | "Hoy" y lista de compras sugerida | — |
 
-## Siguiente sprint
-Implementar el backend en Laravel y conectar el sistema a la base de datos MySQL.
+## Permisos
+- **Administrador:** todo.
+- **Control de materiales:** compras, entregas, devoluciones, merma, estados, costurera, materiales.
+- **Almacén:** compras, entregas, devoluciones, merma.
+- **Ventas:** registrar pedidos y consultar.
+
+## Estructura
+```
+index.html          → pantallas
+css/estilos.css     → diseño (claro/oscuro, celular)
+js/datos.js         → datos de ejemplo, estados, roles y permisos
+js/app.js           → reglas: stock, kardex, merma, devoluciones, ajustes, anulaciones
+bd/                 → script MySQL y modelos
+```
+Los datos se guardan en el navegador (localStorage). En el siguiente sprint se conecta a MySQL con Laravel.
